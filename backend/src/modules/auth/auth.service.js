@@ -1,5 +1,11 @@
 import bcrypt from 'bcryptjs';
-import { createUser , findUserByEmail } from "./auth.repository.js";
+
+import { findUserByEmail, findUserById } from "../users/user.repository.js";
+
+import {
+    generateAccessToken , 
+    generateRefreshToken
+} from "../../shared/utils/jwt.js";
 
 export const registerUser = async({ username , email , password }) => {
     const existingUser = await findUserByEmail(email);
@@ -18,3 +24,34 @@ export const registerUser = async({ username , email , password }) => {
 
     return user;
 };   
+
+export const loginUser = async({ email , password }) => {
+    const user = await findUserByEmail(email);
+
+    if(!user){
+        throw new Error("Invalid credentials.");
+    }
+
+    const isMatch = await bcrypt.compare(
+        password,
+        user.password
+    );
+
+    if(!isMatch){
+        throw new Error("Invalid credentials.");
+    }
+
+    const payload = {
+        userId: user._id,
+    };
+
+    const accesssToken = generateAccessToken(payload);
+
+    const refreshToken = generateRefreshToken(payload);
+
+    return {
+        user,
+        accesssToken,
+        refreshToken
+    };
+};
