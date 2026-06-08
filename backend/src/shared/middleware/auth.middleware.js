@@ -18,7 +18,9 @@ export const authMiddleware = ( req , res , next ) => {
             process.env.JWT_ACCESS_SECRET
         );
 
-        req.user = decoded ;
+        req.user = {
+            userId: decoded.userId,
+        };
 
         next();
 

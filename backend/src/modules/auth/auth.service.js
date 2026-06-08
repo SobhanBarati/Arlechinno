@@ -7,6 +7,43 @@ import {
     generateRefreshToken
 } from "../../shared/utils/jwt.js";
 
+export const refreshTokenService = async(oldRefreshToken) => {
+    if(!oldRefreshToken){
+        throw new Error("No refresh token.");
+    }
+
+    const decoded = jwt.verify(
+        oldRefreshToken,
+        process.env.JWT_REFRESH_SECRET
+    );
+
+    const user = await findUserById(decoded.userId);
+
+    if(!user){
+        throw new Error("User not found.");
+    }
+
+    if(user.refreshToken !== oldRefreshToken){
+        throw new Error("Invalid refresh token.");
+    }
+
+    const payload = {
+        userId: user._id,
+    };
+
+    const newAccessToken = generateAccessToken(payload);
+
+    const newRefreshToken = generateRefreshToken(payload);
+
+    user.refreshToken = newRefreshToken;
+    await user.save();
+
+    return {
+        accesssToken: newAccessToken,
+        refreshToken: newRefreshToken,
+    };
+};
+
 export const registerUser = async({ username , email , password }) => {
     const existingUser = await findUserByEmail(email);
 
@@ -49,9 +86,25 @@ export const loginUser = async({ email , password }) => {
 
     const refreshToken = generateRefreshToken(payload);
 
+    user.refreshToken = refreshToken;
+    await user.save();
+
     return {
         user,
         accesssToken,
         refreshToken
     };
+};
+
+export const logoutService = async(userId) => {
+    const user = await findUserById(userId);
+
+    if(!user){
+        throw new Error("User not found!");
+    }
+
+    refreshToken = null;
+    user.save();
+
+    return true;
 };
