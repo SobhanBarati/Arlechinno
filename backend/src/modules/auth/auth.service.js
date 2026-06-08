@@ -11,7 +11,7 @@ export const registerUser = async({ username , email , password }) => {
     const existingUser = await findUserByEmail(email);
 
     if(existingUser){
-        throw new Error("User already exists.");
+        throw new ConflictError("User already exists.");
     }
 
     const hashedPassword = await bcrypt.hash(password , 10);
@@ -29,7 +29,7 @@ export const loginUser = async({ email , password }) => {
     const user = await findUserByEmail(email);
 
     if(!user){
-        throw new Error("Invalid credentials.");
+        throw new UnauthorizedError("Invalid credentials.");
     }
 
     const isMatch = await bcrypt.compare(
@@ -38,7 +38,7 @@ export const loginUser = async({ email , password }) => {
     );
 
     if(!isMatch){
-        throw new Error("Invalid credentials.");
+        throw new UnauthorizedError("Invalid credentials.");
     }
 
     const payload = {
