@@ -1,0 +1,31 @@
+import express from "express";
+
+import {
+    getMyProfile,
+    updateProfile,
+    searchUsers,
+} from "./user.controller.js";
+
+import { authMiddleware } from "../../shared/middleware/auth.middleware.js";
+
+const router = express.Router();
+
+router.get(
+    "/me",
+    authMiddleware,
+    getMyProfile
+);
+
+router.patch(
+    "/me",
+    authMiddleware,
+    updateProfile,
+);
+
+router.get(
+    "/search",
+    authMiddleware,
+    searchUsers,
+);
+
+export default router;

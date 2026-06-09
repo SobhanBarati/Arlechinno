@@ -8,6 +8,8 @@ import authRoutes from "./modules/auth/auth.routes.js";
 
 import { errorMiddleware } from "./shared/middleware/error.middleware.js";
 
+import userRoutes from "./modules/users/user.route.js";
+
 const app = express();
 
 app.use(cors());
@@ -18,7 +20,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth" , authRoutes);
 
-
+app.use("/api/v1/users" , userRoutes);
 
 app.use(errorMiddleware);
 export default app;

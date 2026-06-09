@@ -6,17 +6,20 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
+            trim: true,
         },
 
         email:{
             type: String,
             required: true,
             unique: true,
+            trim: true,
         },
 
         password:{
             type: String,
-            required: true,    
+            required: true,
+            select: false,    
         },
 
         avatar:{
@@ -41,6 +44,4 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const User = mongoose.model("User" , userSchema);
-
-export default User;
+export default mongoose.model("User", userSchema);
