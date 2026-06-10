@@ -17,3 +17,16 @@ export const findUserChats = async(userId) => {
     .populate("participants" , "username avatar")
     .populate("lastMessage");
 };
+
+export const findPrivateChat = async(
+    userId ,
+    targetUserId,
+) => {
+    return Chat.findOne({
+        type: "private",
+        participants: {
+            $all: [userId , targetUserId],
+            $size: 2,
+        },
+    });
+};
