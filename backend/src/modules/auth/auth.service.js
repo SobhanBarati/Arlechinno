@@ -1,6 +1,10 @@
 import bcrypt from 'bcryptjs';
 
-import { findUserByEmail, findUserById } from "../users/user.repository.js";
+import { 
+    findUserByEmail, 
+    findUserById,
+    createUser
+} from "../users/user.repository.js";
 
 import {
     generateAccessToken , 

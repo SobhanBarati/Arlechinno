@@ -3,7 +3,7 @@ import { asyncHandler } from "../../shared/utils/asyncHandler.js";
 import {
     createPrivateChatService ,
     getUserChatsService,
-} from './chat.model.js';
+} from './chat.service.js';
 
 export const createPrivateChat = asyncHandler(
     async(req , res) => {
@@ -23,8 +23,6 @@ export const createPrivateChat = asyncHandler(
 
 export const getUserChats = asyncHandler(
     async(req , res) => {
-        const { userId } = req.body;
-
         const chats = await getUserChatsService(
             req.user.userId,
         );

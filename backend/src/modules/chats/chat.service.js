@@ -2,7 +2,7 @@ import {
     createChat,
     findPrivateChat,
     findUserChats,
-} from "./chat.model.js";
+} from "./chat.repository.js";
 
 export const createPrivateChatService = async(
     userId ,
@@ -23,7 +23,7 @@ export const createPrivateChatService = async(
     });
 };
 
-export const getUserChats = async(userId) => {
+export const getUserChatsService = async(userId) => {
     return findUserChats(userId);
 };
 

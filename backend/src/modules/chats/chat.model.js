@@ -16,11 +16,13 @@ const chatSchema = new mongoose.Schema({
 
     lastMessage: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "message",
+        ref: "Message",
         default: null,
     },
 },
 { timestamps: true }
 );
 
-export default mongoose.model("Chat" , chatSchema);
+const Chat =  mongoose.model("Chat" , chatSchema);
+
+export default Chat;
