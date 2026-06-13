@@ -7,9 +7,11 @@ import {
 
 import { authMiddleware } from "../../shared/middleware/auth.middleware.js";
 
+import { chatAccessMiddleware } from "../../shared/middleware/chatAccess.middleware.js";
+
 const router = express.Router();
 
-router.post("/" , authMiddleware , sendMessage);
-router.get("/:chatId" , authMiddleware , getMessages);
+router.post("/" , authMiddleware , chatAccessMiddleware , sendMessage);
+router.get("/:chatId" , authMiddleware , chatAccessMiddleware , getMessages);
 
 export default router;
