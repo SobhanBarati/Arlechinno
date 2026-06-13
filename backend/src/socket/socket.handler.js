@@ -1,3 +1,5 @@
+import { sendMessageService } from "../modules/messages/message.service.js";
+
 export const registerSocketHandlers = (io) => {
     io.on("connection" , 
         (socket) => {
@@ -5,6 +7,52 @@ export const registerSocketHandlers = (io) => {
                 "User connected: ",
                 socket.id
             );
+
+            socket.on("join_chat" ,
+                (chatId) => {
+                    socket.join(chatId);
+
+                    console.log(
+                        `${socket.id} joined ${chatId}`
+                    );
+                }
+            );
+
+            socket.on(
+                "send_message",
+                async (data) => {
+                
+                    try {
+                    
+                        console.log("MESSAGE RECEIVED:", data);
+                    
+                        const message =
+                            await sendMessageService(data);
+                    
+                        console.log("MESSAGE SAVED:", message);
+                    
+                        io.to(data.chatId).emit(
+                            "receive_message",
+                            message
+                        );
+                    
+                        console.log(
+                            "MESSAGE EMITTED TO:",
+                            data.chatId
+                        );
+                    
+                    } catch (error) {
+
+                        console.error(error);
+                                
+                        socket.emit(
+                            "error_message",
+                            error.message
+                        );
+                    }
+                }
+            );
+
 
             socket.on("disconnect" ,
                 () => {

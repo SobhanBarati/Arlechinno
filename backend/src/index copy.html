@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket Test</title>
+</head>
+<body>
+
+<button id="join">Join Chat</button>
+<button id="send">Send Message</button>
+
+<script type="module">
+import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
+
+const socket = io("http://localhost:5000");
+
+const chatId = "6a2a9c64e54d38220eb988f6";
+const senderId = "6a2a2eacd250093d1186f97c";
+
+socket.on("connect", () => {
+  console.log("Connected:", socket.id);
+});
+
+socket.on("receive_message", (message) => {
+  console.log("New Message:", message);
+});
+
+document
+  .getElementById("join")
+  .addEventListener("click", () => {
+    socket.emit("join_chat", chatId);
+  });
+
+document
+  .getElementById("send")
+  .addEventListener("click", () => {
+    socket.emit("send_message", {
+      chatId,
+      senderId,
+      content: "سلام از سوکت"
+    });
+  });
+</script>
+
+</body>
+</html>
