@@ -11,13 +11,28 @@
 <script type="module">
 import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 
-const socket = io("http://localhost:5000");
+const ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTJhMmVhY2QyNTAwOTNkMTE4NmY5N2MiLCJpYXQiOjE3ODEzODE4NzAsImV4cCI6MTc4MTM4Mjc3MH0.Qsnx77duo_RFDObJbg_l2u1o2R5o42eIpUje50P-c0k";
+
+const socket =
+  io("http://localhost:5000", {
+    auth: {
+      token: ACCESS_TOKEN
+    }
+  });
 
 const chatId = "6a2a9c64e54d38220eb988f6";
-const senderId = "6a25c22f46515cb934c101c9";
+//const senderId = "6a25c22f46515cb934c101c9";
 
 socket.on("connect", () => {
   console.log("Connected:", socket.id);
+});
+
+socket.on("connect_error", (err) => {
+  console.log("Connect Error:", err.message);
+});
+
+socket.on("disconnect", (reason) => {
+  console.log("Disconnected:", reason);
 });
 
 socket.on("receive_message", (message) => {
@@ -35,7 +50,6 @@ document
   .addEventListener("click", () => {
     socket.emit("send_message", {
       chatId,
-      senderId,
       content: "سلام از سوکت"
     });
   });

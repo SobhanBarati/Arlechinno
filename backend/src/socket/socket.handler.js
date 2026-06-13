@@ -27,7 +27,12 @@ export const registerSocketHandlers = (io) => {
                         console.log("MESSAGE RECEIVED:", data);
                     
                         const message =
-                            await sendMessageService(data);
+                            await sendMessageService({
+                              chatId: data.chatId,
+                              content: data.content,
+                              senderId:
+                                socket.user.userId,
+                            });
                     
                         console.log("MESSAGE SAVED:", message);
                     
