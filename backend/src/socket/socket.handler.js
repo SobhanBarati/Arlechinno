@@ -1,11 +1,35 @@
 import { sendMessageService } from "../modules/messages/message.service.js";
 
+import { 
+    addOnlineUser,
+    getOnlineUsers,
+    removeOnlineUser
+} from "./presence/presence.service.js";
+
 export const registerSocketHandlers = (io) => {
     io.on("connection" , 
         (socket) => {
+
+            const userId = socket.user.userId;
+
+            addOnlineUser(
+                userId,
+                socket.id
+            );
+
             console.log(
                 "User connected: ",
                 socket.id
+            );
+
+            console.log(
+                "Online user: ",
+                userId
+            );
+
+            console.log(
+                "ONLINE USERS: ",
+                getOnlineUsers()
             );
 
             socket.on("join_chat" ,
@@ -61,6 +85,21 @@ export const registerSocketHandlers = (io) => {
 
             socket.on("disconnect" ,
                 () => {
+
+                    removeOnlineUser(
+                        userId
+                    );
+
+                    console.log(
+                        "Offline User: ",
+                        userId
+                    );
+
+                    console.log(
+                        "ONLINE USERS: ",
+                        getOnlineUsers()
+                    );
+
                     console.log(
                         "User disconnected: " ,
                         socket.id
