@@ -3,7 +3,8 @@ import { sendMessageService } from "../modules/messages/message.service.js";
 import { 
     addOnlineUser,
     getOnlineUsers,
-    removeOnlineUser
+    removeOnlineUser,
+    //getUserSockets
 } from "./presence/presence.service.js";
 
 export const registerSocketHandlers = (io) => {
@@ -86,14 +87,22 @@ export const registerSocketHandlers = (io) => {
             socket.on("disconnect" ,
                 () => {
 
-                    removeOnlineUser(
-                        userId
+                    const isOffline = removeOnlineUser(
+                        userId,
+                        socket.id
                     );
 
-                    console.log(
-                        "Offline User: ",
-                        userId
-                    );
+                    /*console.log(
+                        "USER SOCKETS:",
+                        getUserSockets(userId)
+                    );*/
+                    
+                    if(isOffline){
+                        console.log(
+                            "Offline User: ",
+                            userId
+                        );
+                    }
 
                     console.log(
                         "ONLINE USERS: ",
