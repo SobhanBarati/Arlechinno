@@ -1,4 +1,7 @@
-import { sendMessageService } from "../modules/messages/message.service.js";
+import { 
+    sendMessageService,
+    markMessagesAsSeenService,
+} from "../modules/messages/message.service.js";
 
 import { 
     addOnlineUser,
@@ -105,6 +108,32 @@ export const registerSocketHandlers = (io) => {
                 }
             );
 
+            socket.on("message_seen",
+                async(data) => {
+                    try {
+                        const modifiedCount = await markMessagesAsSeenService(
+                            data.chatId,
+                            userId
+                        );
+
+                        if(modifiedCount > 0){
+                            socket.to(data.chatId).emit(
+                                "message_seen" ,
+                                {
+                                    chatId: data.chatId,
+                                    userId,
+                                    modifiedCount,
+                                }
+                            );
+                        }
+                    } catch (error) {
+                        socket.emit(
+                            "error_message",
+                            error.message
+                        )
+                    }
+                }
+            );
 
             socket.on("disconnect" ,
                 () => {
