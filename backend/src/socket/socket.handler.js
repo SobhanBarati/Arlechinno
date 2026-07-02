@@ -8,6 +8,7 @@ import {
     getOnlineUsers,
     removeOnlineUser,
     //getUserSockets
+    updateLastSeen
 } from "./presence/presence.service.js";
 
 export const registerSocketHandlers = (io) => {
@@ -152,12 +153,20 @@ export const registerSocketHandlers = (io) => {
             );
 
             socket.on("disconnect" ,
-                () => {
+                async () => {
 
                     const isOffline = removeOnlineUser(
                         userId,
                         socket.id
                     );
+
+                    if(isOffline){
+                        await updateLastSeen(
+                            userId
+                        );
+
+                        console.log("Last Seen Updated.");
+                    }
 
                     /*console.log(
                         "USER SOCKETS:",

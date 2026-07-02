@@ -1,3 +1,5 @@
+import User from "../../modules/users/user.model.js";
+
 const onlineUsers = new Map();
 
 export const addOnlineUser = (userId , socketId) => {
@@ -46,4 +48,13 @@ export const getOnlineUsers = () => {
 
 export const getUserSockets = (userId) => {
     return onlineUsers.get(userId);
+};
+
+export const updateLastSeen = async(userId) => {
+    await User.findByIdAndUpdate(
+        userId ,
+        {
+            lastSeen: new Date()
+        }
+    );
 };
