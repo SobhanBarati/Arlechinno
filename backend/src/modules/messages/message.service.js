@@ -31,3 +31,28 @@ export const sendMessageService = async({
 export const getMessagesService = async(chatId) => {
     return findMessageByChat(chatId);
 };
+
+export const markMessagesAsSeenService = async({
+    chatId ,
+    userId 
+}) => {
+    const result = await Message.updateMany(
+        {
+            chatId,
+        
+            senderId: {
+                $ne: userId
+            },
+
+            seenBy: {
+                $ne: userId
+            },
+
+            push: {
+                seenBy: userId
+            }
+        }
+    );
+
+    return result.modifiedCount;
+};

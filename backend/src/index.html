@@ -1,59 +1,215 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Socket Test</title>
+    <meta charset="UTF-8">
+    <title>Socket Test</title>
 </head>
 <body>
 
-<button id="join">Join Chat</button>
-<button id="send">Send Message</button>
+    <button id="join">
+        Join Chat
+    </button>
 
-<script type="module">
-import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
+    <button id="send">
+        Send Message
+    </button>
 
-const ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI1YzIyZjQ2NTE1Y2I5MzRjMTAxYzkiLCJpYXQiOjE3ODE2NjA5MzksImV4cCI6MTc4MTY2MTgzOX0.ONrg23ertOCJm3bB3Lkjec6XFkItsypFuIZ_nDjbwzM";
+    <button id="typing">
+        Typing Start
+    </button>
 
-const socket =
-  io("http://localhost:5000", {
-    auth: {
-      token: ACCESS_TOKEN
-    }
-  });
+    <button id="stopTyping">
+        Typing Stop
+    </button>
 
-const chatId = "6a2a9c64e54d38220eb988f6";
-//const senderId = "6a25c22f46515cb934c101c9";
+    <script type="module">
 
-socket.on("connect", () => {
-  console.log("Connected:", socket.id);
-});
+        import { io }
+        from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 
-socket.on("connect_error", (err) => {
-  console.log("Connect Error:", err.message);
-});
+        const ACCESS_TOKEN =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI1YzIyZjQ2NTE1Y2I5MzRjMTAxYzkiLCJpYXQiOjE3ODE4MTQ3NzksImV4cCI6MTc4MTgxNTY3OX0.HAfhr83GCrPJcaIWwjtx36-AkoFDs-naYdLEe0S6hy0";
 
-socket.on("disconnect", (reason) => {
-  console.log("Disconnected:", reason);
-});
+        const chatId =
+            "6a2a9c64e54d38220eb988f6";
 
-socket.on("receive_message", (message) => {
-  console.log("New Message:", message);
-});
+        const socket =
+            io(
+                "http://localhost:5000",
+                {
+                    auth: {
+                        token: ACCESS_TOKEN
+                    }
+                }
+            );
 
-document
-  .getElementById("join")
-  .addEventListener("click", () => {
-    socket.emit("join_chat", chatId);
-  });
+        socket.on(
+            "connect",
+            () => {
 
-document
-  .getElementById("send")
-  .addEventListener("click", () => {
-    socket.emit("send_message", {
-      chatId,
-      content: "سلام از سوکت"
-    });
-  });
-</script>
+                console.log(
+                    "Connected:",
+                    socket.id
+                );
+
+            }
+        );
+
+        window.socket = socket;
+
+        socket.on(
+            "connect_error",
+            (err) => {
+
+                console.log(
+                    "Connect Error:",
+                    err.message
+                );
+
+            }
+        );
+
+        socket.on(
+            "disconnect",
+            (reason) => {
+
+                console.log(
+                    "Disconnected:",
+                    reason
+                );
+
+            }
+        );
+
+        socket.on(
+            "receive_message",
+            (message) => {
+
+                console.log(
+                    "New Message:",
+                    message
+                );
+
+            }
+        );
+
+        socket.on(
+            "error_message",
+            (message) => {
+
+                console.log(
+                    "Socket Error:",
+                    message
+                );
+
+            }
+        );
+
+        socket.on(
+            "user_typing",
+            (data) => {
+
+                console.log(
+                    "Typing:",
+                    data.userId
+                );
+
+            }
+        );
+
+        socket.on(
+            "user_stop_typing",
+            (data) => {
+
+                console.log(
+                    "Stop Typing:",
+                    data.userId
+                );
+
+            }
+        );
+
+        document
+            .getElementById("join")
+            .addEventListener(
+                "click",
+                () => {
+
+                    console.log(
+                        "JOIN CLICKED"
+                    );
+
+                    socket.emit(
+                        "join_chat",
+                        chatId
+                    );
+
+                }
+            );
+
+        document
+            .getElementById("send")
+            .addEventListener(
+                "click",
+                () => {
+
+                    console.log(
+                        "SEND CLICKED"
+                    );
+
+                    socket.emit(
+                        "send_message",
+                        {
+                            chatId,
+                            content:
+                                "سلام از سوکت"
+                        }
+                    );
+
+                }
+            );
+
+        document
+            .getElementById("typing")
+            .addEventListener(
+                "click",
+                () => {
+
+                    console.log(
+                        "BUTTON CLICKED"
+                    );
+
+                    socket.emit(
+                        "typing_start",
+                        {
+                            chatId
+                        }
+                    );
+
+                }
+            );
+
+        document
+            .getElementById("stopTyping")
+            .addEventListener(
+                "click",
+                () => {
+
+                    console.log(
+                        "STOP BUTTON CLICKED"
+                    );
+
+                    socket.emit(
+                        "typing_stop",
+                        {
+                            chatId
+                        }
+                    );
+
+                }
+            );
+
+    </script>
 
 </body>
 </html>

@@ -83,6 +83,28 @@ export const registerSocketHandlers = (io) => {
                 }
             );
 
+            socket.on("typing_start",
+                (data) => {
+                    socket.to(data.chatId).emit(
+                        "user_typing",
+                        {
+                            userId
+                        }
+                    );
+                }
+            );
+
+            socket.on("typing_stop", 
+                (data) => {
+                    socket.to(data.chatId).emit(
+                        "user_stop_typing",
+                        {
+                            userId
+                        }
+                    );
+                }
+            );
+
 
             socket.on("disconnect" ,
                 () => {
