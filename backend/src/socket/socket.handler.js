@@ -108,30 +108,46 @@ export const registerSocketHandlers = (io) => {
                 }
             );
 
-            socket.on("message_seen",
-                async(data) => {
+            socket.on(
+                "messages_seen",
+                async (data) => {
+            
+                    console.log("EVENT RECEIVED:", data);
+            
                     try {
-                        const modifiedCount = await markMessagesAsSeenService(
-                            data.chatId,
-                            userId
-                        );
-
-                        if(modifiedCount > 0){
+            
+                        const modifiedCount =
+                            await markMessagesAsSeenService(
+                                data.chatId,
+                                userId
+                            );
+            
+                        console.log("Modified:", modifiedCount);
+            
+                        if (modifiedCount > 0) {
+            
                             socket.to(data.chatId).emit(
-                                "message_seen" ,
+                                "messages_seen",
                                 {
                                     chatId: data.chatId,
                                     userId,
-                                    modifiedCount,
+                                    modifiedCount
                                 }
                             );
+            
                         }
+            
                     } catch (error) {
+            
+                        console.error(error);
+            
                         socket.emit(
                             "error_message",
                             error.message
-                        )
+                        );
+            
                     }
+            
                 }
             );
 

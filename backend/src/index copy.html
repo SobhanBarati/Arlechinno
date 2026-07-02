@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Socket Test</title>
 </head>
+
 <body>
 
     <button id="join">
@@ -22,13 +24,17 @@
         Typing Stop
     </button>
 
+    <button id="seen">
+        Open Chat
+    </button>
+
     <script type="module">
 
         import { io }
-        from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
+            from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 
         const ACCESS_TOKEN =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTJhMmVhY2QyNTAwOTNkMTE4NmY5N2MiLCJpYXQiOjE3ODE4MTQ3ODEsImV4cCI6MTc4MTgxNTY4MX0.XU3RpW1rrWw_TTJQ9YQxsKNwcjRKmbIREnE6M4_vl_8";
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTJhMmVhY2QyNTAwOTNkMTE4NmY5N2MiLCJpYXQiOjE3ODI5OTI2NTEsImV4cCI6MTc4Mjk5MzU1MX0.-QexsIfaCp0Q49FSP31BmPgPJ-JAehkwsuwkqalH_tk";
 
         const chatId =
             "6a2a9c64e54d38220eb988f6";
@@ -54,8 +60,6 @@
 
             }
         );
-
-        window.socket = socket;
 
         socket.on(
             "connect_error",
@@ -129,15 +133,23 @@
             }
         );
 
+        socket.on(
+            "messages_seen",
+            (data) => {
+
+                console.log(
+                    "MESSAGES SEEN:",
+                    data
+                );
+
+            }
+        );
+
         document
             .getElementById("join")
             .addEventListener(
                 "click",
                 () => {
-
-                    console.log(
-                        "JOIN CLICKED"
-                    );
 
                     socket.emit(
                         "join_chat",
@@ -152,10 +164,6 @@
             .addEventListener(
                 "click",
                 () => {
-
-                    console.log(
-                        "SEND CLICKED"
-                    );
 
                     socket.emit(
                         "send_message",
@@ -175,10 +183,6 @@
                 "click",
                 () => {
 
-                    console.log(
-                        "BUTTON CLICKED"
-                    );
-
                     socket.emit(
                         "typing_start",
                         {
@@ -195,12 +199,24 @@
                 "click",
                 () => {
 
-                    console.log(
-                        "STOP BUTTON CLICKED"
-                    );
-
                     socket.emit(
                         "typing_stop",
+                        {
+                            chatId
+                        }
+                    );
+
+                }
+            );
+
+        document
+            .getElementById("seen")
+            .addEventListener(
+                "click",
+                () => {
+
+                    socket.emit(
+                        "messages_seen",
                         {
                             chatId
                         }
@@ -212,4 +228,5 @@
     </script>
 
 </body>
+
 </html>
