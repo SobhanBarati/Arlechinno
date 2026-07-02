@@ -4,6 +4,7 @@ import {
     getMyProfileService,
     updateProfileService,
     searchUsersService,
+    getUserPresenceService
 } from "./user.service.js";
 
 export const getMyProfile = asyncHandler(
@@ -38,3 +39,21 @@ export const searchUsers = asyncHandler(
         });
     }
 );
+
+export const getUserPresence = asyncHandler(
+    async(req , res , next) => {
+        try {
+            const presence = await getUserPresenceService(
+                req.params.userId
+            );
+    
+            res.status(200).json({
+                success: true,
+                data: presence,
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    }
+)

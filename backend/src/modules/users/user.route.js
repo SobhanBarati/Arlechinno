@@ -4,6 +4,7 @@ import {
     getMyProfile,
     updateProfile,
     searchUsers,
+    getUserPresence
 } from "./user.controller.js";
 
 import { authMiddleware } from "../../shared/middleware/auth.middleware.js";
@@ -26,6 +27,12 @@ router.get(
     "/search",
     authMiddleware,
     searchUsers,
+);
+
+router.get(
+    "/:userId/presence",
+    authMiddleware,
+    getUserPresence
 );
 
 export default router;

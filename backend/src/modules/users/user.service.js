@@ -6,6 +6,9 @@ import {
 
 import { NotFoundError } from "../../shared/errors/NotFoundError.js";
 
+import User from "./user.model.js";
+import { isUserOnline } from "../../socket/presence/presence.service.js";
+
 export const getMyProfileService = async(userId) => {
     const user = await findById(userId);
 
@@ -28,4 +31,17 @@ export const updateProfileService = async(userId , data) => {
 
 export const searchUsersService = async(query) => {
     return await searchUsers(query);
+};
+
+export const getUserPresenceService = async(userId) => {
+    const user = await User.findById(userId).select("lastSeen");
+
+    if(!user){
+        throw new Error("User not found!");
+    }
+
+    return{
+        isOnline: isUserOnline(userId),
+        lastSeen: user.lastSeen,
+    };
 };
