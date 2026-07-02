@@ -22,6 +22,13 @@ export const registerSocketHandlers = (io) => {
                 socket.id
             );
 
+            io.emit(
+                "user_online",
+                {
+                    userId
+                }
+            );
+
             console.log(
                 "User connected: ",
                 socket.id
@@ -163,6 +170,13 @@ export const registerSocketHandlers = (io) => {
                     if(isOffline){
                         await updateLastSeen(
                             userId
+                        );
+
+                        io.emit(
+                            "user_offline",
+                            {
+                                userId
+                            }
                         );
 
                         console.log("Last Seen Updated.");

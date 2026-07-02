@@ -145,6 +145,30 @@
             }
         );
 
+        socket.on(
+    "user_online",
+    (data) => {
+
+        console.log(
+            "ONLINE:",
+            data.userId
+        );
+
+    }
+);
+
+socket.on(
+    "user_offline",
+    (data) => {
+
+        console.log(
+            "OFFLINE:",
+            data.userId
+        );
+
+    }
+);
+
         document
             .getElementById("join")
             .addEventListener(

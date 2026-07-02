@@ -34,7 +34,7 @@
             from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 
         const ACCESS_TOKEN =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTJhMmVhY2QyNTAwOTNkMTE4NmY5N2MiLCJpYXQiOjE3ODI5OTI2NTEsImV4cCI6MTc4Mjk5MzU1MX0.-QexsIfaCp0Q49FSP31BmPgPJ-JAehkwsuwkqalH_tk";
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTJhMmVhY2QyNTAwOTNkMTE4NmY5N2MiLCJpYXQiOjE3ODI5OTczODcsImV4cCI6MTc4Mjk5ODI4N30.uD2HQ_iVfbk9ALrtOqu7fhwz-kcyRF4-wj1kfVSdKzM";
 
         const chatId =
             "6a2a9c64e54d38220eb988f6";
@@ -144,6 +144,30 @@
 
             }
         );
+
+        socket.on(
+    "user_online",
+    (data) => {
+
+        console.log(
+            "ONLINE:",
+            data.userId
+        );
+
+    }
+);
+
+socket.on(
+    "user_offline",
+    (data) => {
+
+        console.log(
+            "OFFLINE:",
+            data.userId
+        );
+
+    }
+);
 
         document
             .getElementById("join")
