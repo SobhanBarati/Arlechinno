@@ -1,6 +1,7 @@
 import { 
     sendMessageService,
     markMessagesAsSeenService,
+    editMessageService,
 } from "../modules/messages/message.service.js";
 
 import { 
@@ -156,6 +157,23 @@ export const registerSocketHandlers = (io) => {
             
                     }
             
+                }
+            );
+
+            socket.on("edit_message",
+                async(data) => {
+                    try {
+                        const message = await editMessageService({
+                            messageId: data.messageId,
+                            userId,
+                            content: data.content,
+                        });
+
+                        io.to(message.chatId.toString()).emit("message_edited", message);
+
+                    } catch (error) {
+                        socket.emit("error_message", error.message);
+                    }
                 }
             );
 

@@ -3,6 +3,7 @@ import { asyncHandler } from "../../shared/utils/asyncHandler.js";
 import {
     sendMessageService,
     getMessagesService,
+    editMessageService,
 } from "./message.service.js";
 
 export const sendMessage = asyncHandler(
@@ -28,5 +29,26 @@ export const getMessages = asyncHandler(
             success: true,
             data: messages,
         });
+    }
+);
+
+export const editMessage = asyncHandler(
+    async(req , res , next) => {
+        try {
+            const message = await editMessageService({
+                messageId: req.params.id,
+                userId: req.user.userId,
+                content: req.body.content,
+            });
+    
+            res.status(200).json({
+                success: true,
+                message: "Message edited successfully.",
+                data: message,
+            });
+
+        } catch (error) {
+            next(error);
+        }
     }
 );

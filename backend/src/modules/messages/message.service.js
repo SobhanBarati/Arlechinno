@@ -59,3 +59,30 @@ export const markMessagesAsSeenService = async (
 
     return result.modifiedCount;
 };
+
+export const editMessageService = async({
+    messageId,
+    userId,
+    content,
+}) => {
+    const message = await Message.findById(messageId);
+
+    if(!message){
+        throw new Error("Message not found!");
+    }
+
+    if(message.senderId.toString() !== userId){
+        throw new Error("You can't edit this message.");
+    }
+
+    message.content = content ;
+
+    message.isEdited = true ;
+
+    message.editedAt = Date.now();
+
+    await message.save();
+    
+    return message;
+    
+};

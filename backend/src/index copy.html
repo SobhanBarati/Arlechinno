@@ -28,13 +28,17 @@
         Open Chat
     </button>
 
+    <button id="edit">
+        Edit Message
+    </button>
+
     <script type="module">
 
         import { io }
             from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 
         const ACCESS_TOKEN =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTJhMmVhY2QyNTAwOTNkMTE4NmY5N2MiLCJpYXQiOjE3ODI5OTczODcsImV4cCI6MTc4Mjk5ODI4N30.uD2HQ_iVfbk9ALrtOqu7fhwz-kcyRF4-wj1kfVSdKzM";
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTJhMmVhY2QyNTAwOTNkMTE4NmY5N2MiLCJpYXQiOjE3ODUyNTE4MDgsImV4cCI6MTc4NTI1MjcwOH0.o72Bh6naaOoDg_S55w3V3RTLrDqJaj137Ti3ETcMnWM";
 
         const chatId =
             "6a2a9c64e54d38220eb988f6";
@@ -146,28 +150,40 @@
         );
 
         socket.on(
-    "user_online",
-    (data) => {
-
-        console.log(
-            "ONLINE:",
-            data.userId
+            "user_online",
+            (data) => {
+            
+                console.log(
+                    "ONLINE:",
+                    data.userId
+                );
+            
+            }
         );
-
-    }
-);
-
-socket.on(
-    "user_offline",
-    (data) => {
-
-        console.log(
-            "OFFLINE:",
-            data.userId
+        
+        socket.on(
+            "user_offline",
+            (data) => {
+            
+                console.log(
+                    "OFFLINE:",
+                    data.userId
+                );
+            
+            }
         );
-
-    }
-);
+        
+        socket.on(
+            "message_edited",
+            (message) => {
+            
+                console.log(
+                    "MESSAGE EDITED:",
+                    message
+                );
+            
+            }
+        );
 
         document
             .getElementById("join")
@@ -246,6 +262,28 @@ socket.on(
                         }
                     );
 
+                }
+            );
+
+        document
+            .getElementById("edit")
+            .addEventListener(
+                "click",
+                () => {
+                
+                    socket.emit(
+                        "edit_message",
+                        {
+                        
+                            messageId:
+                                "6a2aa6cc130228907b3fa1da",
+                        
+                            content:
+                                "پیام ویرایش شد با سوکت"
+                        
+                        }
+                    );
+                    
                 }
             );
 
